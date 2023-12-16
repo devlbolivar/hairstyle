@@ -47,22 +47,18 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter product description"],
   },
-  ratings: {
+  brand: {
+    type: String,
+    required: [true, "Please enter product brand"],
+  },
+  rating: {
     type: Number,
     default: 0,
   },
-  images: [
-    {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  image: {
+    type: String,
+    // required: true,
+  },
   category: {
     type: String,
     required: [true, "Please select category for this product"],
@@ -84,21 +80,21 @@ const productSchema = new mongoose.Schema({
       message: "Please select correct category for product",
     },
   },
-  seller: {
-    type: String,
-    required: [true, "Please enter product seller"],
-  },
-  stock: {
+  // seller: {
+  //   type: String,
+  //   required: [true, "Please enter product seller"],
+  // },
+  countInStock: {
     type: Number,
     required: [true, "Please enter product stock"],
     maxLength: [5, "Product name cannot exceed 5 characters"],
     default: 0,
   },
-  numOfReviews: {
+  numReviews: {
     type: Number,
     default: 0,
   },
-  reviews: [reviewSchema],
+  // reviews: [reviewSchema],
   createdAt: {
     type: Date,
     default: Date.now,
