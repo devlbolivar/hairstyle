@@ -36,8 +36,8 @@ const Cart = () => {
           </Message>
         ) : (
           <ListGroup variant="flush">
-            {cartItems.map((item: any) => (
-              <ListGroup.Item key={item.product}>
+            {cartItems.map((item: any, index: any) => (
+              <ListGroup.Item key={`${item.product}_${index}`}>
                 <Row>
                   <Col md={2}>
                     <Image src={item.image} alt={item.name} fluid rounded />

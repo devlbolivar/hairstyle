@@ -1,105 +1,111 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
-  shippingInfo: {
-    address: {
-      type: String,
-      required: [true, "Please enter your address"],
+const orderSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    city: {
-      type: String,
-      required: [true, "Please enter your city"],
-    },
-    phoneNo: {
-      type: String,
-      required: [true, "Please enter your phone number"],
-    },
-    postalCode: {
-      type: String,
-      required: [true, "Please enter your postal code"],
-    },
-    country: {
-      type: String,
-      required: [true, "Please enter your country"],
-    },
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  orderItems: [
-    {
-      name: {
+    orderItems: [
+      {
+        name: {
+          type: String,
+          required: [true, "Please enter product name"],
+        },
+        quantity: {
+          type: Number,
+          required: [true, "Please enter product quantity"],
+        },
+        image: {
+          type: String,
+          required: [true, "Please enter product image"],
+        },
+        price: {
+          type: Number,
+          required: [true, "Please enter product price"],
+        },
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+      },
+    ],
+    shippingAddress: {
+      address: {
         type: String,
-        required: [true, "Please enter product name"],
+        required: [true, "Please enter your address"],
       },
-      quantity: {
-        type: Number,
-        required: [true, "Please enter product quantity"],
-      },
-      image: {
+      city: {
         type: String,
-        required: [true, "Please enter product image"],
+        required: [true, "Please enter your city"],
       },
-      price: {
-        type: Number,
-        required: [true, "Please enter product price"],
+      postalCode: {
+        type: String,
+        required: [true, "Please enter your postal code"],
       },
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true,
+      country: {
+        type: String,
+        required: [true, "Please enter your country"],
       },
     },
-  ],
-  paymentInfo: {
-    id: {
+    paymentMethod: {
       type: String,
+      required: [true, "Please enter payment method"],
     },
-    status: {
-      type: String,
+    paymentResult: {
+      id: {
+        type: String,
+      },
+      status: {
+        type: String,
+      },
+      update_time: {
+        type: String,
+      },
+      email_address: {
+        type: String,
+      },
+    },
+    itemsPrice: {
+      type: Number,
+      required: [true, "Please enter items price"],
+      default: 0.0,
+    },
+    taxPrice: {
+      type: Number,
+      required: [true, "Please enter tax price"],
+      default: 0.0,
+    },
+    shippingPrice: {
+      type: Number,
+      required: [true, "Please enter shipping price"],
+      default: 0.0,
+    },
+    totalPrice: {
+      type: Number,
+      required: [true, "Please enter total price"],
+      default: 0.0,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
+    },
+    isDelivered: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    deliveredAt: {
+      type: Date,
     },
   },
-  paidAt: {
-    type: Date,
-  },
-  itemsPrice: {
-    type: Number,
-    required: [true, "Please enter items price"],
-    default: 0.0,
-  },
-  taxPrice: {
-    type: Number,
-    required: [true, "Please enter tax price"],
-    default: 0.0,
-  },
-  shippingPrice: {
-    type: Number,
-    required: [true, "Please enter shipping price"],
-    default: 0.0,
-  },
-  totalPrice: {
-    type: Number,
-    required: [true, "Please enter total price"],
-    default: 0.0,
-  },
-  orderStatus: {
-    type: String,
-    required: [true, "Please enter order status"],
-    default: "Processing",
-  },
-  isDelivered: {
-    type: Boolean,
-    default: false,
-  },
-  deliveredAt: {
-    type: Date,
-  },
-  createdAt: {
-    type: Date,
-  },
-});
+  { timestamps: true }
+);
 
 const Order = mongoose.model("Order", orderSchema);
 
