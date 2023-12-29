@@ -37,27 +37,13 @@ const productSchema = new mongoose.Schema({
     trim: true,
     maxLength: [100, "Product name cannot exceed 100 characters"],
   },
-  price: {
-    type: Number,
-    required: [true, "Please enter product price"],
-    maxLength: [5, "Product name cannot exceed 5 characters"],
-    default: 0.0,
-  },
-  description: {
+  image: {
     type: String,
-    required: [true, "Please enter product description"],
+    required: true,
   },
   brand: {
     type: String,
     required: [true, "Please enter product brand"],
-  },
-  rating: {
-    type: Number,
-    default: 0,
-  },
-  image: {
-    type: String,
-    // required: true,
   },
   category: {
     type: String,
@@ -80,21 +66,36 @@ const productSchema = new mongoose.Schema({
       message: "Please select correct category for product",
     },
   },
-  // seller: {
-  //   type: String,
-  //   required: [true, "Please enter product seller"],
-  // },
-  countInStock: {
+  description: {
+    type: String,
+    required: [true, "Please enter product description"],
+  },
+  reviews: [reviewSchema],
+  rating: {
     type: Number,
-    required: [true, "Please enter product stock"],
-    maxLength: [5, "Product name cannot exceed 5 characters"],
     default: 0,
   },
   numReviews: {
     type: Number,
     default: 0,
   },
-  // reviews: [reviewSchema],
+  price: {
+    type: Number,
+    required: [true, "Please enter product price"],
+    maxLength: [5, "Product name cannot exceed 5 characters"],
+    default: 0.0,
+  },
+  countInStock: {
+    type: Number,
+    required: [true, "Please enter product stock"],
+    maxLength: [5, "Product name cannot exceed 5 characters"],
+    default: 0,
+  },
+  // seller: {
+  //   type: String,
+  //   required: [true, "Please enter product seller"],
+  // },
+
   createdAt: {
     type: Date,
     default: Date.now,
