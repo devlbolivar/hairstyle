@@ -7,6 +7,7 @@ import {
   useGetOrderByIdQuery,
   usePayOrderMutation,
   useGetPaypalClientIdQuery,
+  useDeliverOrderMutation,
 } from "../slices/orderSlice";
 import {
   PayPalButtons,
@@ -14,7 +15,7 @@ import {
   SCRIPT_LOADING_STATE,
 } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const OrderDetails = () => {
   const { id: orderId } = useParams<{ id: string }>();
@@ -26,6 +27,7 @@ const OrderDetails = () => {
     error,
   } = useGetOrderByIdQuery(orderId);
 
+  const [deliverOrder, { isLoading: isDelivering }] = useDeliverOrderMutation();
   const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const {
@@ -33,7 +35,7 @@ const OrderDetails = () => {
     isLoading: isPaypalLoading,
     error: paypalError,
   } = useGetPaypalClientIdQuery({});
-  // const { userInfo } = useSelector((state: any) => state.auth);
+  const { userInfo } = useSelector((state: any) => state.auth);
 
   useEffect(() => {
     if (!paypalError && !isPaypalLoading) {
@@ -57,24 +59,6 @@ const OrderDetails = () => {
       }
     }
   }, [order, paypal, paypalDispatch, paypalError, isPaypalLoading]);
-
-  const onApproveTest = async () => {
-    try {
-      await payOrder({
-        orderId,
-        paymentResult: {
-          id: "PAYID-L7Y5VXJU6W71469XU724824U",
-          status: "COMPLETED",
-          update_time: "2021-08-19T06:53:13Z",
-          email_address: "test@paypal.com",
-        },
-      }).unwrap();
-      toast.success("Order paid");
-      refetch();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const createOrder = (data: any, actions: any) => {
     return actions.order
@@ -237,6 +221,31 @@ const OrderDetails = () => {
                   )}
                 </ListGroup.Item>
               )}
+              {isDelivering && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={async () => {
+                        try {
+                          await deliverOrder(orderId).unwrap();
+                          refetch();
+                          toast.success("Order delivered");
+                        } catch (error: any) {
+                          toast.error(
+                            error?.data?.message || error?.message || "Error"
+                          );
+                        }
+                      }}
+                    >
+                      {"Mark As Delivered"}
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
