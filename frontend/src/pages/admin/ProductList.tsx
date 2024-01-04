@@ -3,19 +3,23 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
+import { useParams } from "react-router-dom";
 import {
   useCreateProductMutation,
   useGetProductsQuery,
   useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import { toast } from "react-toastify";
+import Paginate from "../../components/Paginate";
 
 const ProductList = () => {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery({});
-  const [createProduct, { data, isLoading: isCreating, error: createError }] =
+  const pageNumber = useParams();
+  const { data, isLoading, error, refetch } = useGetProductsQuery({
+    pageNumber,
+  });
+  const [createProduct, { isLoading: isCreating, error: createError }] =
     useCreateProductMutation();
-  const [deleteProduct, { data: deleteData, isLoading: isDeleting }] =
-    useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const deleteHandler = async (id: string) => {
     if (window.confirm("Are you sure")) {
@@ -71,7 +75,7 @@ const ProductList = () => {
               </tr>
             </thead>
             <tbody>
-              {products?.map((product: any) => (
+              {data.products?.map((product: any) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -96,6 +100,7 @@ const ProductList = () => {
               ))}
             </tbody>
           </Table>
+          <Paginate pages={data.pages} page={data.page} isAdmin={true} />
         </>
       )}
     </>

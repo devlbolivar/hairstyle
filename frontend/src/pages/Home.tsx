@@ -1,15 +1,20 @@
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
+import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Paginate from "../components/Paginate";
 
 interface ApiError {
   message: string;
 }
 const Home = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery({});
-
+  const { pageNumber, keyword } = useParams();
+  const { data, isLoading, error } = useGetProductsQuery({
+    keyword,
+    pageNumber,
+  });
   let errorMessage;
   if (error && "data" in error) {
     // This error is a FetchBaseQueryError and has a 'data' property
@@ -29,12 +34,18 @@ const Home = () => {
         <>
           <h1>Latest Products</h1>
           <Row>
-            {products.map((product: any) => (
+            {data.products.map((product: any) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
             ))}
           </Row>
+          <Paginate
+            pages={data.pages}
+            page={data.page}
+            isAdmin={data.isAdmin}
+            keyword={keyword ? keyword : ""}
+          />
         </>
       )}
     </>
