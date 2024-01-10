@@ -18,6 +18,7 @@ import {
 import Loader from "../components/Loader";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,6 +71,10 @@ const Product = () => {
         <div>Error:</div>
       ) : (
         <>
+          <Helmet>
+            <title>{product!.name}</title>
+            <meta name="description" content={product!.description} />
+          </Helmet>
           <Link className="btn btn-light my-3" to="/">
             Go Back
           </Link>
