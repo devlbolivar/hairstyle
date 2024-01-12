@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateCart } from "../utils/cartUtils";
+import { CartItem, ShippingAddress } from "../types";
 
 const cartItem = localStorage.getItem("cart");
 const initialState = cartItem
@@ -8,15 +9,19 @@ const initialState = cartItem
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState,
+  initialState: initialState as {
+    cartItems: CartItem[];
+    shippingAddress: ShippingAddress;
+    paymentMethod: string;
+  },
   reducers: {
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item: any) => item._id === newItem._id
+        (item: CartItem) => item._id === newItem._id
       );
       if (existingItem) {
-        state.cartItems = state.cartItems.map((item: any) =>
+        state.cartItems = state.cartItems.map((item: CartItem) =>
           item._id === existingItem._id ? newItem : item
         );
       } else {
@@ -27,7 +32,9 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       const id = action.payload;
-      state.cartItems = state.cartItems.filter((item: any) => item._id !== id);
+      state.cartItems = state.cartItems.filter(
+        (item: CartItem) => item._id !== id
+      );
       return updateCart(state);
     },
     saveShippingAddress(state, action) {

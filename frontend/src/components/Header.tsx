@@ -7,14 +7,15 @@ import logo from "../assets/logo.png";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout as removeCredentials } from "../slices/authSlice";
 import SearchBox from "./SearchBox";
+import { RootState, CartItem } from "../types";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cartItems } = useSelector((state: any) => state.cart);
-  const { userInfo } = useSelector((state: any) => state.auth);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
-  const [logout, { isLoading }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const logoutHandler = async () => {
     try {
@@ -46,7 +47,7 @@ const Header = () => {
                   {cartItems.length > 0 && (
                     <Badge pill bg="success" className="ms-1">
                       {cartItems.reduce(
-                        (acc: number, item: any) => acc + item.quantity,
+                        (acc: number, item) => acc + item.quantity,
                         0
                       )}
                     </Badge>

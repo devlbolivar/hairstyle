@@ -1,6 +1,8 @@
+import { FC } from "react";
 import { Helmet } from "react-helmet-async";
+import { Metadata } from "../types";
 
-const Meta = ({ title, description, keywords }: any) => {
+const Meta: FC<Metadata> = ({ title, description, keywords }) => {
   return (
     <Helmet>
       <title>{title}</title>
