@@ -1,3 +1,7 @@
+export interface ComponentPropsBase {
+  children: React.ReactNode;
+}
+
 export interface RootState {
   auth: { userInfo: UserInfo };
   cart: {

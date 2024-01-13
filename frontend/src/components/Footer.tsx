@@ -1,12 +1,14 @@
 import { Container, Row, Col } from "react-bootstrap";
+import { getYear } from "date-fns";
 
 function Footer() {
-  const currentYear = new Date().getFullYear();
   return (
     <footer>
       <Container>
         <Row>
-          <Col className="text-center py-3">© {currentYear} HairStyle</Col>
+          <Col className="text-center py-3">
+            © {getYear(new Date())} HairStyle
+          </Col>
         </Row>
       </Container>
     </footer>

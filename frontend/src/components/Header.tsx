@@ -1,13 +1,13 @@
-import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
-import logo from "../assets/logo.png";
-import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout as removeCredentials } from "../slices/authSlice";
+import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
+import { RootState } from "../types";
+import { useLogoutMutation } from "../slices/usersApiSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import SearchBox from "./SearchBox";
-import { RootState, CartItem } from "../types";
+import { ROUTES } from "../constants";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Header = () => {
     try {
       await logout({}).unwrap();
       dispatch(removeCredentials({}));
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     } catch (err) {
       console.log(err);
     }
@@ -29,19 +29,16 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
+      <Navbar className="bg-body-secondary" expand="md" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>
-              <img src={logo} alt="HairStyle" />
-              HairStyle
-            </Navbar.Brand>
+          <LinkContainer to={ROUTES.HOME}>
+            <Navbar.Brand>HairStyle</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav"></Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <SearchBox />
-              <LinkContainer to="/cart">
+              <LinkContainer to={ROUTES.CART}>
                 <Nav.Link>
                   <FaShoppingCart></FaShoppingCart> Cart
                   {cartItems.length > 0 && (
@@ -56,7 +53,7 @@ const Header = () => {
               </LinkContainer>
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
+                  <LinkContainer to={ROUTES.PROFILE}>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
@@ -64,21 +61,21 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <LinkContainer to="/login">
+                <LinkContainer to={ROUTES.LOGIN}>
                   <Nav.Link>
                     <FaUser></FaUser> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <LinkContainer to="/admin/orderList">
+                <NavDropdown title="Dashboard" id="dashboard">
+                  <LinkContainer to={ROUTES.ADMIN_ORDERS}>
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/productList">
+                  <LinkContainer to={ROUTES.ADMIN_PRODUCTS}>
                     <NavDropdown.Item>Products</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/userList">
+                  <LinkContainer to={ROUTES.ADMIN_USERS}>
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>

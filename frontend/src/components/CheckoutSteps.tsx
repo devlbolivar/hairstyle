@@ -1,6 +1,8 @@
 import { Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
+//TODO: Refactor this component. It's not very DRY.
+
 interface Props {
   step1?: boolean;
   step2?: boolean;

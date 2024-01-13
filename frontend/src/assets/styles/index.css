@@ -48,7 +48,16 @@ table th {
   width: 100%;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0; 
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-caption-custom {
+  position: absolute;
+  right: 0;
+  bottom: 0 !important;
+  left: 0 !important;
+  color: #fff;
   background: rgba(0, 0, 0, 0.5);
 }
 

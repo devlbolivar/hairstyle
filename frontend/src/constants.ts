@@ -6,3 +6,15 @@ export const USERS_URL = "/api/users";
 export const ORDERS_URL = "/api/orders";
 export const PAYPAL_URL = "/api/config/paypal";
 export const UPLOAD_URL = "/api/uploads";
+
+export const ROUTES = {
+  LOGIN: "/login",
+  HOME: "/",
+  CART: "/cart",
+  PROFILE: "/profile",
+  PRODUCT: "/product",
+  SEARCH: "/search",
+  ADMIN_ORDERS: "/admin/orderList",
+  ADMIN_PRODUCTS: "/admin/productList",
+  ADMIN_USERS: "/admin/userList",
+};
