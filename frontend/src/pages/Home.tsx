@@ -1,66 +1,69 @@
-import { Row, Col } from "react-bootstrap";
-import Product from "../components/Product";
-import { useGetProductsQuery } from "../slices/productsApiSlice";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
-import Paginate from "../components/Paginate";
-import ProductCarousel from "../components/ProductCarousel";
-import Meta from "../components/Meta";
+import { Row, Col, Container } from "react-bootstrap";
+import { toast } from "react-toastify";
+import Skeleton from "react-loading-skeleton";
+import { useGetProductsQuery } from "../slices/productsApiSlice";
+import { Product, Paginate, ProductCarousel, Meta } from "../components";
+import GoBack from "../components/GoBack";
 
 interface ApiError {
   message: string;
 }
+
+const handleError = (error: unknown): string => {
+  const apiError = error as ApiError;
+  return apiError.message ?? "An unknown error occurred";
+};
+
 const Home = () => {
-  const { pageNumber, keyword } = useParams();
+  const { pageNumber = "1", keyword = "" } = useParams<{
+    pageNumber?: string;
+    keyword?: string;
+  }>();
   const { data, isLoading, error } = useGetProductsQuery({
     keyword,
     pageNumber,
   });
-  let errorMessage;
-  if (error && "data" in error) {
-    // This error is a FetchBaseQueryError and has a 'data' property
-    errorMessage = (error.data as any)?.message || "An error occurred";
-  } else {
-    // This error is a SerializedError or other type without a 'data' property
-    errorMessage = "An unknown error occurred";
-  }
+
+  const errorMessage = error ? handleError(error) : null;
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [errorMessage]);
 
   return (
     <>
-      {!keyword ? (
-        <ProductCarousel />
-      ) : (
-        <Link to="/" className="btn btn-light mb-4">
-          {" "}
-          Go Back{" "}
-        </Link>
-      )}
+      {!keyword && <ProductCarousel />}
       {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{errorMessage}</Message>
+        <Skeleton height={30} />
       ) : (
-        <>
-          <Meta />
-          <h1>Latest Products</h1>
-          <Row>
-            {data.products.map((product: any) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-          <Paginate
-            pages={data.pages}
-            page={data.page}
-            isAdmin={data.isAdmin}
-            keyword={keyword ? keyword : ""}
-          />
-        </>
+        <RenderProducts data={data} keyword={keyword} />
       )}
     </>
   );
 };
+
+const RenderProducts = ({ data, keyword }: { data: any; keyword: string }) => (
+  <Container className="py-3 px-0">
+    <Meta />
+    {keyword && <GoBack to="/" />}
+    <h1>Latest Products</h1>
+    <Row>
+      {data?.products.map((product: any) => (
+        <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+          <Product product={product} />
+        </Col>
+      ))}
+    </Row>
+    <Paginate
+      pages={data.pages}
+      page={data.page}
+      isAdmin={data.isAdmin}
+      keyword={keyword}
+    />
+  </Container>
+);
 
 export default Home;

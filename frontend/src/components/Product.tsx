@@ -1,8 +1,11 @@
+import { FC } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
+import { CartItem } from "../types";
 
-const Product = ({ product }: any) => {
+//TODO: Add type for product
+const Product: FC<{ product: CartItem }> = ({ product }) => {
   return (
     <Card className="my-3 p-3 rounded">
       <Link to={`/product/${product._id}`}>

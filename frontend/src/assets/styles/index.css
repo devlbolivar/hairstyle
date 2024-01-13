@@ -51,3 +51,12 @@ table th {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
 }
+
+.custom-carousel .carousel-item {
+  height: 300px; 
+}
+
+.custom-carousel .carousel-item img {
+  height: 100%;
+  object-fit: cover; 
+}

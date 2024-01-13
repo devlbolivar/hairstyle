@@ -13,11 +13,12 @@ import {
 import { FaTrash } from "react-icons/fa";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { RootState } from "../types";
 
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { cartItems } = useSelector((state: any) => state.cart);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
 
   const addToCartHandler = (product: any, quantity: any) => {
     dispatch(addToCart({ ...product, quantity }));

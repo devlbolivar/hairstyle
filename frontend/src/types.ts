@@ -61,3 +61,8 @@ export interface PaginateProps {
   isAdmin: boolean;
   keyword?: string;
 }
+
+export interface GoBackProps {
+  to: string;
+  className?: string;
+}
